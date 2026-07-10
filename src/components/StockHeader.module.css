@@ -1,0 +1,125 @@
+.header {
+  background: linear-gradient(135deg, #161b22 0%, #1c2128 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 1rem;
+}
+
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.identity {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.logo svg {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(118, 185, 0, 0.3);
+}
+
+.symbolRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.symbol {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.exchange {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  letter-spacing: 0.05em;
+  align-self: center;
+}
+
+.companyName {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.sectorTag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.priceBlock {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  display: block;
+}
+
+.changeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-top: 6px;
+}
+
+.positive {
+  color: var(--green);
+  background: var(--green-bg);
+}
+
+.negative {
+  color: var(--red);
+  background: var(--red-bg);
+}
+
+.asOf {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+@media (max-width: 520px) {
+  .inner {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .priceBlock {
+    text-align: left;
+  }
+
+  .price {
+    font-size: 1.6rem;
+  }
+
+  .symbol {
+    font-size: 1.4rem;
+  }
+}
