@@ -1,7 +1,8 @@
-import { nvdaQuote, nvdaPriceHistory, nvdaNews } from '../data/nvdaMockData'
+import { nvdaQuote, nvdaPriceHistory, nvdaNews, nvdaVolumeData } from '../data/nvdaMockData'
 import StockHeader from './StockHeader'
 import PriceChart from './PriceChart'
 import StatsGrid from './StatsGrid'
+import VolumeBarChart from './VolumeBarChart'
 import NewsSection from './NewsSection'
 import styles from './StockPage.module.css'
 
@@ -40,6 +41,7 @@ export default function StockPage() {
           <div className={styles.leftCol}>
             <PriceChart history={nvdaPriceHistory} isPositive={isPositive} />
             <StatsGrid quote={nvdaQuote} />
+            <VolumeBarChart data={nvdaVolumeData} />
           </div>
 
           {/* Right column */}

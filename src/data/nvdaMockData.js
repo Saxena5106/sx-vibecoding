@@ -92,6 +92,21 @@ export const nvdaPriceHistory = [
   { date: 'Jul 7',  close: 146.25 },
 ]
 
+// Daily volume vs 20-day average volume (last 12 trading days)
+export const nvdaVolumeData = [
+  { date: 'Jun 20', dailyVolume: 285, avg20d: 312 },
+  { date: 'Jun 23', dailyVolume: 261, avg20d: 310 },
+  { date: 'Jun 24', dailyVolume: 304, avg20d: 311 },
+  { date: 'Jun 25', dailyVolume: 338, avg20d: 313 },
+  { date: 'Jun 26', dailyVolume: 295, avg20d: 312 },
+  { date: 'Jun 27', dailyVolume: 272, avg20d: 311 },
+  { date: 'Jun 30', dailyVolume: 319, avg20d: 312 },
+  { date: 'Jul 1',  dailyVolume: 289, avg20d: 312 },
+  { date: 'Jul 2',  dailyVolume: 344, avg20d: 313 },
+  { date: 'Jul 3',  dailyVolume: 218, avg20d: 311 },
+  { date: 'Jul 7',  dailyVolume: 248, avg20d: 312 },
+]
+
 export const nvdaNews = [
   {
     id: 1,

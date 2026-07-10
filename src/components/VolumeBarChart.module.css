@@ -1,0 +1,39 @@
+.wrapper {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.25rem 1rem;
+  margin-top: 1rem;
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.2rem;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
+}
+
+.tooltip {
+  background: var(--bg-tertiary, #161b22);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.tooltipLabel {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+}
+
+.tooltipRow {
+  margin: 0.15rem 0;
+  font-size: 0.8rem;
+}
