@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: StockView backend – Lambda + DynamoDB cache + HTTP API Gateway
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: nodejs20.x
+    Environment:
+      Variables:
+        CACHE_TABLE_NAME: !Ref StockCacheTable
+  HttpApi:
+    CorsConfiguration:
+      AllowOrigins:
+        - '*'
+      AllowMethods:
+        - GET
+        - OPTIONS
+      AllowHeaders:
+        - Content-Type
+
+Parameters:
+  FinnhubApiKey:
+    Type: String
+    NoEcho: true
+    Description: Your Finnhub API key (never committed to source control)
+
+Resources:
+
+  # ── Lambda ────────────────────────────────────────────────────────────────
+  StockProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: stockview-proxy
+      CodeUri: functions/stockProxy/
+      Handler: index.handler
+      Description: Fetches NVDA data from Finnhub and caches responses in DynamoDB
+      Environment:
+        Variables:
+          FINNHUB_API_KEY: !Ref FinnhubApiKey
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref StockCacheTable
+      Events:
+        GetStock:
+          Type: HttpApi
+          Properties:
+            Path: /stock
+            Method: GET
+
+  # ── DynamoDB cache ─────────────────────────────────────────────────────────
+  StockCacheTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: StockCache
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: cacheKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: cacheKey
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+
+Outputs:
+  StockApiUrl:
+    Description: Paste this value as VITE_API_URL in Amplify Console → Environment variables
+    Value: !Sub 'https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/stock'

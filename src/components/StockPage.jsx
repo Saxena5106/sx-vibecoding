@@ -1,4 +1,4 @@
-import { nvdaQuote, nvdaPriceHistory, nvdaNews, nvdaVolumeData } from '../data/nvdaMockData'
+import { useStockData } from '../hooks/useStockData'
 import StockHeader from './StockHeader'
 import PriceChart from './PriceChart'
 import StatsGrid from './StatsGrid'
@@ -6,8 +6,45 @@ import VolumeBarChart from './VolumeBarChart'
 import NewsSection from './NewsSection'
 import styles from './StockPage.module.css'
 
+/** Derive % change rows from live price history */
+function buildPerformanceRows(priceHistory, currentPrice) {
+  if (!priceHistory || priceHistory.length < 2) return [];
+  const closes = priceHistory.map((d) => d.close);
+  const pct = (from) => {
+    if (!from) return null;
+    const p = ((currentPrice - from) / from) * 100;
+    return { value: `${p >= 0 ? '+' : ''}${p.toFixed(2)}%`, positive: p >= 0 };
+  };
+  return [
+    { label: '1 Day',   ...pct(closes.at(-2)) },
+    { label: '1 Week',  ...pct(closes.at(-6)) },
+    { label: '1 Month', ...pct(closes.at(-22)) },
+    { label: '3 Month', ...pct(closes.at(-66)) },
+  ].filter((r) => r.value != null);
+}
+
 export default function StockPage() {
-  const isPositive = nvdaQuote.change >= 0
+  const { data, loading, error } = useStockData()
+
+  if (loading) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.loadingState}>Loading live data…</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.errorState}>⚠ {error}</div>
+      </div>
+    )
+  }
+
+  const { quote, priceHistory, volumeData, news } = data
+  const isPositive = quote.change >= 0
+  const perfRows = buildPerformanceRows(priceHistory, quote.price)
 
   return (
     <div className={styles.page}>
@@ -27,21 +64,21 @@ export default function StockPage() {
         </div>
         <div className={styles.navBadge}>
           <span className={styles.liveDot} />
-          Mock Data
+          Live
         </div>
       </nav>
 
       {/* Stock header */}
-      <StockHeader quote={nvdaQuote} />
+      <StockHeader quote={quote} />
 
       {/* Main content */}
       <main className={styles.main}>
         <div className={styles.grid}>
           {/* Left column */}
           <div className={styles.leftCol}>
-            <PriceChart history={nvdaPriceHistory} isPositive={isPositive} />
-            <StatsGrid quote={nvdaQuote} />
-            <VolumeBarChart data={nvdaVolumeData} />
+            <PriceChart history={priceHistory} isPositive={isPositive} />
+            <StatsGrid quote={quote} />
+            <VolumeBarChart data={volumeData} />
           </div>
 
           {/* Right column */}
@@ -65,14 +102,7 @@ export default function StockPage() {
             {/* Performance snapshot */}
             <div className={styles.perfCard}>
               <h2 className={styles.summaryTitle}>Performance</h2>
-              {[
-                { label: '1 Day',  value: '+2.39%', positive: true  },
-                { label: '1 Week', value: '+5.12%', positive: true  },
-                { label: '1 Month',value: '+10.8%', positive: true  },
-                { label: '3 Month',value: '+45.3%', positive: true  },
-                { label: 'YTD',    value: '+72.4%', positive: true  },
-                { label: '1 Year', value: '+86.7%', positive: true  },
-              ].map((row) => (
+              {perfRows.map((row) => (
                 <div key={row.label} className={styles.perfRow}>
                   <span className={styles.perfLabel}>{row.label}</span>
                   <span className={`${styles.perfValue} ${row.positive ? styles.perfGreen : styles.perfRed}`}>
@@ -83,7 +113,7 @@ export default function StockPage() {
             </div>
 
             {/* News */}
-            <NewsSection news={nvdaNews} />
+            <NewsSection news={news} />
           </div>
         </div>
       </main>
